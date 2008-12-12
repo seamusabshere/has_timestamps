@@ -1,0 +1,59 @@
+HasTimestamps
+=================
+
+Lets you timestamp models, like if you want to fake a CRM.
+
+Note: it doesn't save objects automatically, so you have to run a "user.save" (etc.) when you're done timestamping.
+
+Example
+=======
+
+class CreateTimestamps < ActiveRecord::Migration
+  def self.up
+    create_table(:timestamps) do |t|
+      t.integer   :timestampable_id
+      t.string    :timestampable_type
+      t.string    :key
+      t.datetime  :stamped_at
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table(:timestamps)
+  end
+end
+
+then...
+
+class User < ActiveRecord::Base
+  has_timestamps
+end
+
+>> user.timestamps
+=> []
+>> user.timestamp!(:hailed)
+=> Wed Dec 10 15:11:52 -0500 2008
+>> user.timestamps
+=> [#<Timestamp id: nil, timestampable_id: 14, timestampable_type: "User", key: "hailed", stamped_at: "2008-12-10 15:11:52", created_at: nil, updated_at: nil>]
+>> user.timestamped?(:hailed)
+=> true
+>> user.save
+=> true
+>> user.timestamped?(:saluted)
+=> false
+>> user.timestamp!(:saluted)
+=> Wed Dec 10 15:12:28 -0500 2008
+>> user.timestamped?(:saluted)
+=> true
+>> user.timestamps[:saluted]
+=> Wed Dec 10 15:12:28 -0500 2008
+>> user.timestamps[:hailed]
+=> Wed Dec 10 15:11:52 -0500 2008
+
+Credits
+=======
+
+Thanks to Fingertips for inspiration.
+
+Copyright (c) 2008 Seamus Abshere, released under the MIT license.
