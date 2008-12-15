@@ -47,20 +47,18 @@ describe "HasTimestamps" do
     assert_equal @another_time, @person.timestamps[:hailed]
   end
   
-  xit "should set timestamp manually to Date" do
-    date = Date.today
-    @person.timestamps[:hailed] = date
+  it "should set timestamp manually to Date" do
+    @person.timestamps[:hailed] = @another_time.to_date
     @person.save
     @person.reload
-    assert_equal date, Date._parse(@person.timestamps[:hailed])
+    assert_equal @another_time, @person.timestamps[:hailed]
   end
   
-  xit "should set timestamp manually to DateTime" do
-    date_time = DateTime.parse('1982-01-01')
-    @person.timestamps[:hailed] = date_time
+  it "should set timestamp manually to DateTime" do
+    @person.timestamps[:hailed] = @another_time.to_datetime
     @person.save
     @person.reload
-    assert_equal date_time, DateTime.parse(@person.timestamps[:hailed])
+    assert_equal @another_time, @person.timestamps[:hailed]
   end
   
   it "should set timestamp to nil" do

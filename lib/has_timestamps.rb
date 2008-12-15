@@ -10,7 +10,7 @@ module ActiveRecord #:nodoc:
           class_eval do
             def save_or_destroy_timestamps
               timestamps.each do |timestamp|
-                if timestamp.stamped_at.is_a?(Time)
+                if timestamp.stamped_at.acts_like?(:time) or timestamp.stamped_at.is_a?(Date) or timestamp.stamped_at.is_a?(DateTime)
                   timestamp.save
                 elsif !timestamp.new_record?
                   timestamp.destroy
@@ -20,8 +20,7 @@ module ActiveRecord #:nodoc:
             after_save :save_or_destroy_timestamps
             
             def timestamp!(key)
-              #timestamps[key.to_s] = Time.zone.nil? ? Time.now : Time.zone.now
-              timestamps[key.to_s] = ActiveRecord::Base.default_timezone == :utc ? Time.now.utc : Time.now
+              timestamps[key.to_s] = Time.zone.nil? ? Time.now : Time.zone.now
             end
             
             def timestamped?(key)
