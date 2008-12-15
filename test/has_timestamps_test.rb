@@ -1,95 +1,115 @@
-require File.dirname(__FILE__) + '/test_helper'
+require File.expand_path('../test_helper', __FILE__)
+require 'active_support/testing/core_ext/test/unit/assertions'
+require 'mocha'
 
-class Person < ActiveRecord::Base
-  has_timestamps
-end
-
-class HasTimestampsTest < Test::Unit::TestCase
-  fixtures :people, :timestamps
-
-  def setup
-    @person = people(:seamus)
-    @timestamp = timestamps(:saluted)
+describe "HasTimestamps" do
+  before do
+    HasTimestampsTest::Initializer.setup_database
+    create_person
+    @person = Person.first
+    @timestamp = Timestamp.first
     @now = freeze_time
-    @another_time = DateTime.parse('1982-01-01T00:00:00+00:00')
+    @another_time = Time.now.yesterday
   end
   
-  def test_should_get_timestamp_with_brackets
+  after do
+    HasTimestampsTest::Initializer.teardown_database
+  end
+  
+  it "should get timestamp with brackets" do
     assert_equal @timestamp.stamped_at, @person.timestamps[@timestamp.key.to_sym]
   end
   
-  def test_should_get_nil_timestamp_with_brackets
+  it "should get nil timestamp with brackets" do
     assert_nil @person.timestamps[:gibberish]
   end
   
-  def test_should_get_timestamp_as_datetime
-    assert_equal @person.timestamps[@timestamp.key.to_sym].class, ActiveSupport::TimeWithZone
+  it "should get timestamp as datetime" do
+    assert @person.timestamps[@timestamp.key.to_sym].acts_like?(:time)
   end
 
-  def test_should_query_timestamp_with_brackets
+  it "should query timestamp with brackets" do
     assert_equal @person.timestamped?(@timestamp.key.to_sym), true
     assert_equal @person.timestamped?(:gibberish), false
   end
     
-  def test_should_set_timestamp
+  it "should set timestamp" do
     @person.timestamp!(:hailed)
     @person.save
     @person.reload
     assert_equal @now, @person.timestamps[:hailed]
   end
   
-  def test_should_set_timestamp_manually
+  it "should set timestamp manually" do
     @person.timestamps[:hailed] = @another_time
     @person.save
     @person.reload
     assert_equal @another_time, @person.timestamps[:hailed]
   end
   
-  def test_should_set_timestamp_to_nil
+  xit "should set timestamp manually to Date" do
+    date = Date.today
+    @person.timestamps[:hailed] = date
+    @person.save
+    @person.reload
+    assert_equal date, Date._parse(@person.timestamps[:hailed])
+  end
+  
+  xit "should set timestamp manually to DateTime" do
+    date_time = DateTime.parse('1982-01-01')
+    @person.timestamps[:hailed] = date_time
+    @person.save
+    @person.reload
+    assert_equal date_time, DateTime.parse(@person.timestamps[:hailed])
+  end
+  
+  it "should set timestamp to nil" do
     @person.timestamps[:hailed] = nil
     @person.save
     @person.reload
     assert_nil @person.timestamps[:hailed]
   end
   
-  def test_should_reset_timestamp
-    assert_not_equal @now, @person.timestamps[:saluted]
+  it "should reset timestamp" do
+    old_time = @person.timestamps[:saluted]
     @person.timestamp!(:saluted)
     @person.save
     @person.reload
+    assert_not_equal old_time, @person.timestamps[:saluted]
     assert_equal @now, @person.timestamps[:saluted]
   end
   
-  def test_should_reset_timestamp_manually
+  it "should reset timestamp manually" do
     old_time = @person.timestamps[:saluted]
     @person.timestamps[:saluted] = @another_time
     @person.save
     @person.reload
+    assert_not_equal old_time, @person.timestamps[:saluted]
     assert_equal @another_time, @person.timestamps[:saluted]
   end
   
-  def test_should_reset_timestamp_to_nil
+  it "should reset timestamp to nil" do
     @person.timestamps[:saluted] = nil
     @person.save
     @person.reload
     assert_nil @person.timestamps[:saluted]
   end
   
-  def test_should_save_timestamps
+  it "should save timestamps" do
     assert_difference('Timestamp.count', 1) do
       @person.timestamp!(:hailed)
       @person.save
     end
   end
   
-  def test_should_destroy_nil_timestamps
+  it "should destroy nil timestamps" do
     assert_difference('Timestamp.count', -1) do
       @person.timestamps[:saluted] = nil
       @person.save
     end
   end
   
-  def test_should_not_save_nil_timestamps
+  it "should not save nil timestamps" do
     assert_no_difference('Timestamp.count') do
       @person.timestamps[:hailed] = nil
       @person.save
@@ -97,6 +117,12 @@ class HasTimestampsTest < Test::Unit::TestCase
   end
   
   private
+  
+  def create_person
+    person_fixture = Person.create :name => 'Seamus'
+    person_fixture.timestamp!(:saluted)
+    person_fixture.save
+  end
   
   def freeze_time
     now = Time.now.at_beginning_of_day
