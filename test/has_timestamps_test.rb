@@ -24,7 +24,7 @@ describe "HasTimestamps" do
     assert_nil @person.timestamps[:gibberish]
   end
   
-  it "should get timestamp as datetime" do
+  it "should get timestamp as a Time" do
     assert @person.timestamps[@timestamp.key.to_sym].acts_like?(:time)
   end
 
