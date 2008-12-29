@@ -5,6 +5,19 @@ Lets you timestamp models, like if you want to fake a CRM.
 
 Note: it doesn't save objects automatically, so you have to run a "user.save" (etc.) when you're done timestamping.
 
+Installation
+============
+
+You should be able to run this as a plugin or as a gem.
+
+For environment.rb:
+
+config.gem 'seamusabshere-has_timestamps', :lib => 'has_timestamps', :source => 'http://gems.github.com'
+
+Then be sure to:
+
+rake gems:install
+
 Example
 =======
 

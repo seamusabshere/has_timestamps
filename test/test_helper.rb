@@ -27,7 +27,8 @@ module HasTimestampsTest
       require 'rubygems' rescue LoadError
       
       require 'test/spec'
-      require File.join(PLUGIN_ROOT, 'init')
+      require 'timestamp'
+      require 'has_timestamps'
     end
     
     def self.configure_database
