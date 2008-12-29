@@ -20,7 +20,7 @@ module ActiveRecord #:nodoc:
             after_save :save_or_destroy_timestamps
             
             def timestamp!(key)
-              timestamps[key.to_s] = Time.zone.nil? ? Time.now : Time.zone.now
+              timestamps[key.to_s] = Time.now
             end
             
             def timestamped?(key)
