@@ -1,5 +1,4 @@
 require File.expand_path('../test_helper', __FILE__)
-require 'active_support/testing/core_ext/test/unit/assertions'
 
 module SharedTests
   def self.included(klass)
@@ -116,7 +115,6 @@ end
 describe "HasTimestamps, when a timezone is not set" do
   before do
     HasTimestampsTest::Initializer.setup_database
-    create_fixtures
     @person = Person.first
     @timestamp = Timestamp.first
     @another_time = 3.days.ago.at_beginning_of_day
@@ -135,7 +133,6 @@ end
 describe "HasTimestamps, when a timezone is set" do
   before do
     HasTimestampsTest::Initializer.setup_database
-    create_fixtures
     Time.zone = 'Pacific Time (US & Canada)'
     @person = Person.first
     @timestamp = Timestamp.first
@@ -150,22 +147,4 @@ describe "HasTimestamps, when a timezone is set" do
   end
   
   include SharedTests
-end
-
-DELTA_IN_SECONDS = 5
-
-def assert_simultaneous(t1, t2)
-  assert_in_delta t1, t2, DELTA_IN_SECONDS
-end
-
-def assert_not_simultaneous(t1, t2)
-  assert_raise(Test::Unit::AssertionFailedError) do
-    assert_simultaneous t1, t2
-  end
-end
-
-def create_fixtures
-  person_fixture = Person.create :name => 'Seamus'
-  person_fixture.timestamps[:saluted] = Time.now.years_ago(1).at_beginning_of_day
-  person_fixture.save
 end

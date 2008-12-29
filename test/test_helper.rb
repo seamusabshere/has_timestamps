@@ -22,6 +22,7 @@ module HasTimestampsTest
       
       require 'activesupport'
       require 'activerecord'
+      require 'active_support/testing/core_ext/test/unit/assertions'
       
       require 'rubygems' rescue LoadError
       
@@ -47,6 +48,9 @@ module HasTimestampsTest
           t.timestamps
         end
       end
+      person_fixture = Person.create :name => 'Seamus'
+      person_fixture.timestamps[:saluted] = Time.now.years_ago(1).at_beginning_of_day
+      person_fixture.save
     end
     
     def self.teardown_database
@@ -66,4 +70,16 @@ HasTimestampsTest::Initializer.start
  
 class Person < ActiveRecord::Base
   has_timestamps
+end
+
+DELTA_IN_SECONDS = 5
+
+def assert_simultaneous(t1, t2)
+  assert_in_delta t1, t2, DELTA_IN_SECONDS
+end
+
+def assert_not_simultaneous(t1, t2)
+  assert_raise(Test::Unit::AssertionFailedError) do
+    assert_simultaneous t1, t2
+  end
 end
