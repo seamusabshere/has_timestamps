@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = "has_timestamps"
-  s.version  = "1.1"
-  s.date     = "2008-12-29"
+  s.version  = "1.2"
+  s.date     = "2009-01-02"
   s.summary  = "Rails plugin to add named timestamps to ActiveRecord models."
   s.email    = "seamus@abshere.net"
   s.homepage = "http://github.com/seamusabshere/has_timestamps"
@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
     "Rakefile",
     "README",
     "tasks/has_timestamps_tasks.rake",
+    "init.rb",
+    "rails/init.rb"
     ]
   s.test_files = [  
     "test/has_timestamps_test.rb",
