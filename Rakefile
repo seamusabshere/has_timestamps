@@ -20,3 +20,19 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |s|
+    s.name        = "has_timestamps"
+    s.summary     = "Rails plugin to add named timestamps to ActiveRecord models."
+    s.email       = "seamus@abshere.net"
+    s.homepage    = "http://github.com/seamusabshere/has_timestamps"
+    s.description = "has_timestamps is a Rails plugin that allows you to add named timestamps to ActiveRecord models without adding database columns."
+    s.authors     = "Seamus Abshere"
+    s.files       = FileList["[A-Z]*.*", "{bin,generators,lib,test,spec}/**/*", "init.rb", "rails/**/*"] # first two are jeweler defaults
+    s.test_files = [ "test/has_timestamps_test.rb" ]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+end
