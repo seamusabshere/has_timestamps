@@ -29,7 +29,7 @@ module SharedTests
       end
       
       it "should set timestamp" do
-        @person.timestamp!(:hailed)
+        @person.timestamp(:hailed)
         @person.save
         @person.reload
         assert_simultaneous Time.now, @person.timestamps[:hailed]
@@ -37,7 +37,7 @@ module SharedTests
 
       it "should reset timestamp" do
         old_time = @person.timestamps[:saluted]
-        @person.timestamp!(:saluted)
+        @person.timestamp(:saluted)
         @person.save
         @person.reload
         assert_not_simultaneous(old_time, @person.timestamps[:saluted])
@@ -90,7 +90,7 @@ module SharedTests
       
       it "should save timestamps" do
         assert_difference('Timestamp.count', 1) do
-          @person.timestamp!(:hailed)
+          @person.timestamp(:hailed)
           @person.save
         end
       end

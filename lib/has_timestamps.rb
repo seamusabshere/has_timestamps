@@ -17,7 +17,7 @@ module HasTimestamps
         end
         after_save :save_or_destroy_timestamps
         
-        def timestamp!(key)
+        def timestamp(key)
           timestamps[key.to_s] = Time.now
         end
         
