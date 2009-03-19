@@ -28,7 +28,8 @@ module HasTimestamps
 
       has_many :timestamps, opts.merge(:as => :timestampable) do
         def [](key)
-          fetch_timestamp(key).stamped_at
+          t = fetch_timestamp(key, false)
+          t.stamped_at unless t.nil?
         end
 
         def []=(key, stamped_at)
@@ -41,8 +42,10 @@ module HasTimestamps
 
         private
 
-        def fetch_timestamp(key)
-          find_by_key(key) || build_timestamp(key)
+        def fetch_timestamp(key, build_if_nil = true)
+          t = find_by_key(key)
+          t = build_timestamp(key) if t.nil? and build_if_nil
+          t
         end
 
         def build_timestamp(key)
