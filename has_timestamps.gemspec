@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{has_timestamps}
-  s.version = "1.4.0"
+  s.version = "1.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Seamus Abshere"]
-  s.date = %q{2009-02-10}
+  s.date = %q{2009-03-19}
   s.description = %q{has_timestamps is a Rails plugin that allows you to add named timestamps to ActiveRecord models without adding database columns.}
   s.email = %q{seamus@abshere.net}
   s.files = ["VERSION.yml", "lib/has_timestamps.rb", "lib/timestamp.rb", "test/has_timestamps_test.rb", "test/test_helper.rb", "init.rb", "rails/init.rb"]
