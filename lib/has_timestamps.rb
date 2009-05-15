@@ -1,3 +1,7 @@
+$:.unshift(File.dirname(__FILE__))
+require 'timestamp'
+require 'has_timestamps'
+
 module HasTimestamps
   def self.included(base) #:nodoc:
     base.extend(ClassMethods)
@@ -26,7 +30,7 @@ module HasTimestamps
         end
       end
 
-      has_many :timestamps, opts.merge(:class_name => '::Timestamp', :as => :timestampable) do
+      has_many :timestamps, opts.merge(:class_name => 'HasTimestamps::Timestamp', :as => :timestampable) do
         def [](key)
           t = fetch_timestamp(key, false)
           t.stamped_at unless t.nil?
