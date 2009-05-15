@@ -30,7 +30,7 @@ begin
     s.homepage    = "http://github.com/seamusabshere/has_timestamps"
     s.description = "has_timestamps is a Rails plugin that allows you to add named timestamps to ActiveRecord models without adding database columns."
     s.authors     = "Seamus Abshere"
-    s.files       = FileList["[A-Z]*.*", "{bin,generators,lib,test,spec}/**/*", "init.rb", "rails/**/*"] # first two are jeweler defaults
+    s.files       = FileList["[A-Z]*.*", "{bin,generators,lib,test,spec}/**/*", "init.rb", "rails/**/*", "examples/**/*"] # first two are jeweler defaults
     s.test_files = [ "test/has_timestamps_test.rb" ]
   end
 rescue LoadError
