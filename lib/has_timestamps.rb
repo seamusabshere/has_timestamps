@@ -1,7 +1,3 @@
-$:.unshift(File.dirname(__FILE__))
-require 'timestamp'
-require 'has_timestamps'
-
 module HasTimestamps
   def self.included(base) #:nodoc:
     base.extend(ClassMethods)
